@@ -1,0 +1,47 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}       
+
+#add {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: aquamarine;
+    color: rgb(8, 4, 4);
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;  
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    color: rgb(231, 31, 31);
+    border: none;
+    padding: 5px 10px;  
+}
+
+
+.delete-btn {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: rgb(225, 213, 86);
+    color: rgb(8, 4, 4);
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;  
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    color: rgb(14, 40, 89);
+}
