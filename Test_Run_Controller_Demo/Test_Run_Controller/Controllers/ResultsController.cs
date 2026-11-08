@@ -20,9 +20,11 @@ namespace Test_Run_Controller.Controllers
         private static readonly List<TestResult> result = new();
 
         [HttpPost]
-        public IActionResult Post([FromBody] TestResult testResult)
+        public IActionResult Post([FromBody] List<TestResult> testResult)
         {
-            result.Add(testResult);
+            if(testResult == null || testResult.Count == 0)
+                return BadRequest("TestResult cannot be null or empty.");
+            result.AddRange(testResult);
             return Ok(testResult);
         }
 
