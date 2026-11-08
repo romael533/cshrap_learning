@@ -68,21 +68,17 @@ namespace Test_Run_Controller.Controllers
         [HttpGet("slowest")]
         public IActionResult GetSlowest(int top = 3)
         {
-            var durationresult = new List<int>();
-            for (int i = 0; i < result.Count; i++)
+            var sorted = result.OrderByDescending(b => b.Duration).ToList();
+            var slowestlist = new List<String>();
+            if (top > result.Count)
             {
-                durationresult.Add(result[i].Duration);
-            }
-            var sorted = durationresult.OrderByDescending(n => n).ToList();
-            var slowestlist = new List<int>();
-            if (top > result.Count) {
                 top = result.Count;
             }
             for (int i = 0; i < top; i++)
             {
-                slowestlist.Add(sorted[i]);
+                slowestlist.Add(sorted[i].Suite);
             }
-            return Ok(slowestlist);
+            return Ok(slowestlist);           
         }
     }
 }
