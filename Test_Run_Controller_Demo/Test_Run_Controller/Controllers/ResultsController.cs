@@ -1,5 +1,6 @@
 ﻿        using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Test_Run_Controller.Services;
 
 namespace Test_Run_Controller.Controllers
 {
@@ -17,70 +18,38 @@ namespace Test_Run_Controller.Controllers
     [ApiController]
     public class ResultsController : ControllerBase
     {
-        private static readonly List<TestResult> result = new();
+        private readonly ITestResultService _service;
+
+        public ResultsController(ITestResultService service) {
+            _service = service;
+        }
 
         [HttpPost]
         public IActionResult Post([FromBody] List<TestResult> testResult)
         {
-            if(testResult == null || testResult.Count == 0)
+            if (testResult == null || testResult.Count == 0)
                 return BadRequest("TestResult cannot be null or empty.");
-            result.AddRange(testResult);
+            _service.AddRange(testResult);
             return Ok(testResult);
         }
 
         [HttpGet]
-        public IActionResult Get(string suite = null)
+        public IActionResult Get(string? suite = null)
         {
-            if (suite != null)
-            {
-                var finalresult = result.Where(r => r.Suite == suite).ToList();
-                return Ok(finalresult);
-            }
-            else
-            {
-                return Ok(result);
-            }
+           return Ok(_service.Get(suite));
         }
+
+
         [HttpGet("/summary")]
         public IActionResult GetSummary()
         {
-            int passedcount = 0;
-            int failedcount = 0;
-            for (int i = 0; i < result.Count; i++)
-            {
-                switch (result[i].Status)
-                {
-                    case TestStatus.Passed:
-                        passedcount++;
-                        break;
-                    case TestStatus.Failed:
-                        failedcount++;
-                        break;
-                }
-            }
-            int totalcount = result.Count;
-            int passpercentage = 0;
-            if (passedcount != 0)
-            {
-                passpercentage = passedcount * 100 / totalcount;
-            }
-            return Ok(new { TotalTestcases = totalcount, PassedTestcases = passedcount, FailedTestcases = failedcount, PassPercentage = passpercentage });
+            return Ok(_service.GetSummary());
         }
 
         [HttpGet("slowest")]
         public IActionResult GetSlowest(int top = 3)
         {
-            var sorted = result.OrderByDescending(b => b.Duration).ToList();
-            var slowestlist = new List<String>();
-            if (top > result.Count)
-            {
-                top = result.Count;
-            }
-            for (int i = 0; i < top; i++)
-            {
-                slowestlist.Add(sorted[i].Suite);
-            }
-            return Ok(slowestlist);           
+            return Ok(_service.GetSlowest(top));           
         }
     }
 }
