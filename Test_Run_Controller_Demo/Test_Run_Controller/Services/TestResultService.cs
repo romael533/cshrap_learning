@@ -5,29 +5,29 @@ namespace Test_Run_Controller.Services
     
     public class TestResultService : ITestResultService
     {
-        private readonly List<TestResult> _results = new();        
+        private readonly List<TestResult> finalTestResults = new();        
 
-        public void AddRange(List<TestResult> testResult)
+        public void AddRange(List<TestResult> testResults)
         {
-            if (testResult == null || testResult.Count == 0)
-                throw new ArgumentException("TestResult cannot be null or empty.");
-            _results.AddRange(testResult);
+            if (testResults == null || testResults.Count == 0)
+                throw new ArgumentException("TestResults cannot be null or empty.");
+            finalTestResults.AddRange(testResults);
         }
 
         public IEnumerable<TestResult> Get(string? suite = null)
         {
             if (suite != null)
             {
-                return _results.Where(r => r.Suite == suite).ToList();
+                return finalTestResults.Where(r => r.Suite == suite).ToList();
             }
-            return _results.ToList();
+            return finalTestResults.ToList();
         }
 
         public TestSummary GetSummary()
         {
             int passedcount = 0;
             int failedcount = 0;
-            foreach (var r in _results)
+            foreach (var r in finalTestResults)
             {
                 switch (r.Status)
                 {
@@ -39,7 +39,7 @@ namespace Test_Run_Controller.Services
                         break;
                 }
             }
-            int totalcount = _results.Count;
+            int totalcount = finalTestResults.Count;
             int passpercentage = 0;
             if (totalcount != 0)
             {
@@ -50,7 +50,7 @@ namespace Test_Run_Controller.Services
 
         public List<string> GetSlowest(int top)
         {
-            var sorted = _results.OrderByDescending(b => b.Duration).ToList();
+            var sorted = finalTestResults.OrderByDescending(b => b.Duration).ToList();
             if (top > sorted.Count)
             {
                 top = sorted.Count;

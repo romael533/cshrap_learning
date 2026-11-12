@@ -5,16 +5,16 @@ using Test_Run_Controller.Services;
 namespace Test_Run_Controller.Controllers
 {
     public enum TestStatus { 
-    Passed, Failed
+    Passed, Failed, UnDetermined
     }
     public class TestResult {
         public int Id { get; set; }
-        public string Name { get; set; } = "";
-        public string Suite { get; set; } = "";
+        public string Name { get; set; } = string.Empty;
+        public string Suite { get; set; } = string.Empty;
         public TestStatus Status { get; set; }
         public int Duration { get; set; }
     }
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class ResultsController : ControllerBase
     {
@@ -25,12 +25,12 @@ namespace Test_Run_Controller.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] List<TestResult> testResult)
+        public IActionResult Post([FromBody] List<TestResult> testResults)
         {
-            if (testResult == null || testResult.Count == 0)
-                return BadRequest("TestResult cannot be null or empty.");
-            _service.AddRange(testResult);
-            return Ok(testResult);
+            if (testResults == null || testResults.Count == 0)
+                return BadRequest("TestResults cannot be null or empty.");
+            _service.AddRange(testResults);
+            return Ok(testResults);
         }
 
         [HttpGet]
