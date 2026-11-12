@@ -1,0 +1,15 @@
+# Build output and IDE/VCS folders should not go into the image
+**/bin/
+**/obj/
+**/.vs/
+**/.git/
+**/.idea/
+**/.vscode/
+
+# Local-only files
+**/*.user
+**/*.suo
+**/launchSettings.json
+**/*.http
+Dockerfile
+.dockerignore
