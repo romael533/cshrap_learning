@@ -1,33 +1,39 @@
+using Microsoft.EntityFrameworkCore;
 using Test_Run_Controller.Controllers;
+using Test_Run_Controller.Data;
 
 namespace Test_Run_Controller.Services
 {
     
     public class TestResultService : ITestResultService
     {
-        private readonly List<TestResult> finalTestResults = new();        
-
+        private readonly AppDbContext _db;
+        public TestResultService(AppDbContext db)
+        {
+            _db = db;
+        }
         public void AddRange(List<TestResult> testResults)
         {
             if (testResults == null || testResults.Count == 0)
                 throw new ArgumentException("TestResults cannot be null or empty.");
-            finalTestResults.AddRange(testResults);
+            _db.TestResults.AddRange(testResults);
+            _db.SaveChanges();
         }
 
         public IEnumerable<TestResult> Get(string? suite = null)
         {
             if (suite != null)
             {
-                return finalTestResults.Where(r => r.Suite == suite).ToList();
+                return _db.TestResults.Where(r => r.Suite == suite).ToList();
             }
-            return finalTestResults.ToList();
+            return _db.TestResults.ToList();
         }
 
         public TestSummary GetSummary()
         {
             int passedcount = 0;
             int failedcount = 0;
-            foreach (var r in finalTestResults)
+            foreach (var r in _db.TestResults)
             {
                 switch (r.Status)
                 {
@@ -39,7 +45,7 @@ namespace Test_Run_Controller.Services
                         break;
                 }
             }
-            int totalcount = finalTestResults.Count;
+            int totalcount = _db.TestResults.Count();
             int passpercentage = 0;
             if (totalcount != 0)
             {
@@ -50,7 +56,7 @@ namespace Test_Run_Controller.Services
 
         public List<string> GetSlowest(int top)
         {
-            var sorted = finalTestResults.OrderByDescending(b => b.Duration).ToList();
+            var sorted = _db.TestResults.OrderByDescending(b => b.Duration).ToList();
             if (top > sorted.Count)
             {
                 top = sorted.Count;

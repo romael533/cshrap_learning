@@ -1,11 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+using Test_Run_Controller.Data;
 using Test_Run_Controller.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers();
-builder.Services.AddSingleton<ITestResultService, TestResultService>();
+builder.Services.AddScoped<ITestResultService, TestResultService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
