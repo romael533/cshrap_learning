@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="Test_Run_Controller.Tests/Test_Run_Controller.Tests.csproj" Id="f86726f4-d2ee-4a56-82e9-cfb15bbf3dfd" />
   <Project Path="Test_Run_Controller/Test_Run_Controller.csproj" />
 </Solution>
