@@ -14,10 +14,9 @@ namespace Test_Run_Controller.Services
         }
         public void AddRange(List<TestResult> testResults)
         {
-            if (testResults == null || testResults.Count == 0)
-                throw new ArgumentException("TestResults cannot be null or empty.");
             _db.TestResults.AddRange(testResults);
             _db.SaveChanges();
+            finalTestResults.AddRange(testResults);
         }
 
         public IEnumerable<TestResult> Get(string? suite = null)

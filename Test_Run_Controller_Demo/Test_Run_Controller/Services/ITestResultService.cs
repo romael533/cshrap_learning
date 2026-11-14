@@ -2,8 +2,6 @@
 
 namespace Test_Run_Controller.Services
 {
-    public record TestSummary(int totalCount, int passedCount, int failedCount, int passPercentage);
-
     public interface ITestResultService
     {
         void AddRange(List<TestResult> testResults);
