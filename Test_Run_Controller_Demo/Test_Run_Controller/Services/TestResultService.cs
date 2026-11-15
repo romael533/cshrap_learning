@@ -5,7 +5,7 @@ namespace Test_Run_Controller.Services
     
     public class TestResultService : ITestResultService
     {
-        private readonly List<TestResult> finalTestResults = new();        
+        public readonly List<TestResult> finalTestResults = new();        
 
         public void AddRange(List<TestResult> testResults)
         {
